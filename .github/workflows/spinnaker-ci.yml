@@ -1,5 +1,6 @@
 # This is a basic workflow to help you get started with Actions
-#VERSION 2
+#VERSION 1
+
 
 name: Spinnaker Pre Install
 env:
@@ -7,7 +8,7 @@ env:
   #REGISTRY_URL: "gcr.io/spinnaker-marketplace/"
   REGISTRY_URL: "us-docker.pkg.dev/spinnaker-community/docker/"
   NEW_REGISTRY_URL: "registry.cn-beijing.aliyuncs.com/spinnaker-cd/"
-  NEW_REGISTRY_URL2: "docker.io/spinnakercd/"
+  NEW_REGISTRY_URL2: "docker.io/evescn/"
   TAG_FILE: "tagfile.txt"
   BOM_DIR: ".boms"
   
@@ -36,7 +37,7 @@ jobs:
       run: |
         docker pull registry.cn-beijing.aliyuncs.com/spinnaker-cd/halyard:1.32.0
         docker run -itd -p 8084:8084 -p 9000:9000 --name halyard  registry.cn-beijing.aliyuncs.com/spinnaker-cd/halyard:1.32.0
-        sleep 5
+        sleep 15
         docker ps | grep halyard 
         chmod +x getbom.sh
         docker cp getbom.sh halyard:/opt/getbom.sh
@@ -55,7 +56,7 @@ jobs:
       
         echo  -e "\033[32m  ---> Tag File ---> \033[0m"
         cat ${TAG_FILE}
-        docker login -u ${{ secrets.DOCKER_USER}} -p ${{ secrets.DOCKER_PASSWD}} ${NEW_REGISTRY_URL}
+        # docker login -u ${{ secrets.DOCKER_USER}} -p ${{ secrets.DOCKER_PASSWD}} ${NEW_REGISTRY_URL}
         for tag in $(cat ${TAG_FILE})
         do 
            echo  -e "\033[32m  ---> pull ---> ${REGISTRY_URL}${tag} \033[0m"
